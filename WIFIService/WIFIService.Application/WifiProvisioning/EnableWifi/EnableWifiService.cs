@@ -1,29 +1,45 @@
-using WIFIService.Domain.Entities;
-using WIFIService.Domain.ValueObjects;
+using FluentValidation;
+using WIFIService.Application.Clients;
+using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
 
 namespace WIFIService.Application.WifiProvisioning.EnableWifi;
 
 public class EnableWifiService : IEnableWifiService
 {
-    public Task ExecuteAsync(EnableWifiServiceInput input, CancellationToken cancellationToken = default)
+    private readonly IValidator<EnableWifiServiceDto> _validator;
+    private readonly INetworkInfrastructureClient _networkInfrastructureClient;
+    private readonly INetworkControllerClient _networkControllerClient;
+
+    public EnableWifiService(
+        IValidator<EnableWifiServiceDto> validator,
+        INetworkInfrastructureClient networkInfrastructureClient,
+        INetworkControllerClient networkControllerClient)
     {
-        var characteristics = input.ServiceCharacteristics
-            .Select(c => new ServiceCharacteristic(c.Name, c.ValueType, c.Value))
-            .ToList();
+        _validator = validator;
+        _networkInfrastructureClient = networkInfrastructureClient;
+        _networkControllerClient = networkControllerClient;
+    }
 
-        var orderItem = ServiceOrderItem.Create(
-            id: input.OrderItemId,
-            serviceId: input.ServiceId,
-            specification: new ServiceSpecification(input.ServiceSpecificationId, input.ServiceSpecificationName),
-            characteristics: characteristics
+    public async Task ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
+    {
+        await _validator.ValidateAndThrowAsync(input, cancellationToken);
+
+        var customerId = input.ServiceCharacteristics.First(c => c.Name == "customerId").Value["customerId"];
+        var customerAddress = input.ServiceCharacteristics.First(c => c.Name == "customerAddress").Value["customerAddress"];
+        var speedProfileCode = input.ServiceCharacteristics.First(c => c.Name == "speedProfile").Value["speedProfile"];
+
+        var speedProfiles = await _networkInfrastructureClient.GetSpeedProfilesAsync(cancellationToken);
+
+        var speedProfile = speedProfiles.FirstOrDefault(p => p.Code == speedProfileCode)
+            ?? throw new InvalidOperationException($"Speed profile '{speedProfileCode}' not found.");
+
+        var activationRequest = new NetworkActivationRequest(
+            CustomerId: customerId,
+            CustomerAddress: customerAddress,
+            UpstreamSpeed: speedProfile.UploadSpeedMbps,
+            DownstreamSpeed: speedProfile.DownloadSpeedMbps
         );
 
-        var serviceOrder = ServiceOrder.Create(
-            externalId: input.ExternalId,
-            description: input.Description,
-            orderItem: orderItem
-        );
-
-        return Task.CompletedTask;
+        await _networkControllerClient.ActivateAsync(activationRequest, cancellationToken);
     }
 }

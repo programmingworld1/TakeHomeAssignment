@@ -1,6 +1,8 @@
+using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
+
 namespace WIFIService.Application.WifiProvisioning.EnableWifi;
- 
+
 public interface IEnableWifiService
 {
-    Task ExecuteAsync(EnableWifiServiceInput input, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default);
 }

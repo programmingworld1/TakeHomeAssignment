@@ -1,3 +1,4 @@
+using WIFIService.Api.Mappings;
 using WIFIService.Api.Middlewares;
 
 namespace WIFIService.Api;
@@ -9,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddScoped<BusinessProblemDetailsFactory>();
 
+        services.AddMappings();
         services.AddControllers();
         services.AddOpenApi();
 

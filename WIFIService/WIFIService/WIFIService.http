@@ -1,11 +1,7 @@
 @WIFIService_HostAddress = http://localhost:5067
 
-GET {{WIFIService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
-
-POST {{WIFIService_HostAddress}}/api/serviceorder
+### Enable WiFi Service
+POST {{WIFIService_HostAddress}}/api/wifiprovisioning
 Content-Type: application/json
 
 {
