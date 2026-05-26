@@ -30,7 +30,7 @@ public class WifiProvisioningController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(EnableWifiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -48,6 +48,6 @@ public class WifiProvisioningController : ControllerBase
             return new ObjectResult(pd) { StatusCode = pd.Status };
         }
 
-        return Ok();
+        return Ok(new EnableWifiResponse("WiFi has been activated successfully."));
     }
 }
