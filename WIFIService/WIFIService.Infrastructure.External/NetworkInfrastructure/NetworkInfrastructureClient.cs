@@ -22,8 +22,12 @@ public class NetworkInfrastructureClient : INetworkInfrastructureClient
     {
         _logger.LogInformation("Fetching speed profiles from Network Infrastructure API");
 
-        var response = await _httpClient.GetFromJsonAsync<NetworkInfrastructureResponse>(
-            "speed-profiles", cancellationToken)
+        var httpResponse = await _httpClient.GetAsync("speed-profiles", cancellationToken);
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new HttpRequestException($"Network Infrastructure API returned {(int)httpResponse.StatusCode}");
+
+        var response = await httpResponse.Content.ReadFromJsonAsync<NetworkInfrastructureResponse>(cancellationToken)
             ?? throw new HttpRequestException("Network Infrastructure API returned an empty response.");
 
         var profiles = response.SpeedProfiles

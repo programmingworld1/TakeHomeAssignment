@@ -31,11 +31,6 @@ public class NetworkControllerClient : INetworkControllerClient
         var response = await _httpClient.PostAsJsonAsync("activate", payload, CamelCase, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
-        {
-            _logger.LogError("Network Controller returned {StatusCode} for customer {CustomerId}",
-                (int)response.StatusCode, request.CustomerId);
-        }
-
-        response.EnsureSuccessStatusCode();
+            throw new HttpRequestException($"Network Controller returned {(int)response.StatusCode}");
     }
 }
