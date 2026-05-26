@@ -1,37 +1,52 @@
-using FluentValidation;
-using WIFIService.Application.Clients;
+using MapsterMapper;
+using Microsoft.Extensions.Logging;
+using WIFIService.Application.Clients.NetworkController;
+using WIFIService.Application.Clients.NetworkInfrastructure;
+using WIFIService.Application.Responses;
 using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
+using WIFIService.Domain.Entities;
 
 namespace WIFIService.Application.WifiProvisioning.EnableWifi;
 
 public class EnableWifiService : IEnableWifiService
 {
-    private readonly IValidator<EnableWifiServiceDto> _validator;
     private readonly INetworkInfrastructureClient _networkInfrastructureClient;
     private readonly INetworkControllerClient _networkControllerClient;
+    private readonly IMapper _mapper;
+    private readonly ILogger<EnableWifiService> _logger;
 
     public EnableWifiService(
-        IValidator<EnableWifiServiceDto> validator,
         INetworkInfrastructureClient networkInfrastructureClient,
-        INetworkControllerClient networkControllerClient)
+        INetworkControllerClient networkControllerClient,
+        IMapper mapper,
+        ILogger<EnableWifiService> logger)
     {
-        _validator = validator;
         _networkInfrastructureClient = networkInfrastructureClient;
         _networkControllerClient = networkControllerClient;
+        _mapper = mapper;
+        _logger = logger;
     }
 
-    public async Task ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
+    public async Task<Result> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
     {
-        await _validator.ValidateAndThrowAsync(input, cancellationToken);
+        var serviceOrder = _mapper.Map<ServiceOrder>(input);
+        var characteristics = serviceOrder.OrderItem.ServiceCharacteristics;
 
-        var customerId = input.ServiceCharacteristics.First(c => c.Name == "customerId").Value["customerId"];
-        var customerAddress = input.ServiceCharacteristics.First(c => c.Name == "customerAddress").Value["customerAddress"];
-        var speedProfileCode = input.ServiceCharacteristics.First(c => c.Name == "speedProfile").Value["speedProfile"];
+        var customerId = characteristics.First(c => c.Name == "customerId").Value["customerId"];
+        var customerAddress = characteristics.First(c => c.Name == "customerAddress").Value["customerAddress"];
+        var speedProfileCode = characteristics.First(c => c.Name == "speedProfile").Value["speedProfile"];
+
+        _logger.LogInformation("Processing WiFi activation for customer {CustomerId} with speed profile {SpeedProfileCode}",
+            customerId, speedProfileCode);
 
         var speedProfiles = await _networkInfrastructureClient.GetSpeedProfilesAsync(cancellationToken);
+        var speedProfile = speedProfiles.FirstOrDefault(p => p.Code == speedProfileCode);
 
-        var speedProfile = speedProfiles.FirstOrDefault(p => p.Code == speedProfileCode)
-            ?? throw new InvalidOperationException($"Speed profile '{speedProfileCode}' not found.");
+        if (speedProfile is null)
+        {
+            _logger.LogWarning("Speed profile {SpeedProfileCode} not found", speedProfileCode);
+            return Result.Failure(new Error("SpeedProfileNotFound", $"Speed profile '{speedProfileCode}' not found."));
+        }
 
         var activationRequest = new NetworkActivationRequest(
             CustomerId: customerId,
@@ -41,5 +56,11 @@ public class EnableWifiService : IEnableWifiService
         );
 
         await _networkControllerClient.ActivateAsync(activationRequest, cancellationToken);
+
+        serviceOrder.MarkAsActive();
+
+        _logger.LogInformation("WiFi activation succeeded for customer {CustomerId}", customerId);
+
+        return Result.Success();
     }
 }

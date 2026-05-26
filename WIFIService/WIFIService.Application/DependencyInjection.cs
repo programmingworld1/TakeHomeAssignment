@@ -1,8 +1,6 @@
-using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WIFIService.Application.WifiProvisioning.EnableWifi;
-
 
 namespace WIFIService.Application;
 
@@ -12,7 +10,6 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddScoped<IEnableWifiService, EnableWifiService>();
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         return services;
     }

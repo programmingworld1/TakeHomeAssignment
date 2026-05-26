@@ -1,4 +1,4 @@
-﻿namespace WIFIService.Application.Results
+namespace WIFIService.Application.Responses
 {
     // Voor operations with return value
     public class Result<T>

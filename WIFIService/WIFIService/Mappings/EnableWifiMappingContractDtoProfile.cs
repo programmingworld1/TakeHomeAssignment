@@ -4,7 +4,7 @@ using WIFIService.Contracts.WifiProvisioning.EnableWifi;
 
 namespace WIFIService.Api.Mappings;
 
-public class EnableWifiMappingProfile : IRegister
+public class EnableWifiMappingContractDtoProfile : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
@@ -17,7 +17,7 @@ public class EnableWifiMappingProfile : IRegister
                 src.OrderItem.Service.ServiceSpecification.Id,
                 src.OrderItem.Service.ServiceSpecification.Name
             ))
-            .Map(dest => dest.ServiceCharacteristics, src => src.OrderItem.Service.ServiceCharacteristic
+            .Map(dest => dest.ServiceCharacteristics, src => src.OrderItem.Service.ServiceCharacteristics
                 .Select(c => new ServiceCharacteristicDto(c.Name, c.ValueType, c.Value))
                 .ToList());
     }

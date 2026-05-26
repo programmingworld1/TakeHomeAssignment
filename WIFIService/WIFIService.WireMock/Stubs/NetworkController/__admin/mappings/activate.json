@@ -1,0 +1,9 @@
+{
+  "Request": {
+    "Path": "/activate",
+    "Methods": [ "POST" ]
+  },
+  "Response": {
+    "StatusCode": 200
+  }
+}

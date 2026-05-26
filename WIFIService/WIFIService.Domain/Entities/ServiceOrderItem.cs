@@ -6,19 +6,19 @@ public class ServiceOrderItem
 {
     public string Id { get; private set; } = string.Empty;
     public string ServiceId { get; private set; } = string.Empty;
-    public ServiceSpecification ServiceSpecification { get; private set; } = null!;
+    public ServiceSpecification ServiceSpecification { get; private set; }
     public List<ServiceCharacteristic> ServiceCharacteristics { get; private set; } = [];
 
-    private ServiceOrderItem() { }
-
-    public static ServiceOrderItem Create(string id, string serviceId, ServiceSpecification specification, List<ServiceCharacteristic> characteristics)
+    public ServiceOrderItem(string id, string serviceId, ServiceSpecification specification, List<ServiceCharacteristic> characteristics)
     {
-        return new ServiceOrderItem
-        {
-            Id = id,
-            ServiceId = serviceId,
-            ServiceSpecification = specification,
-            ServiceCharacteristics = characteristics
-        };
+        ArgumentException.ThrowIfNullOrWhiteSpace(id);
+        ArgumentException.ThrowIfNullOrWhiteSpace(serviceId);
+        ArgumentNullException.ThrowIfNull(specification);
+        ArgumentNullException.ThrowIfNull(characteristics);
+
+        Id = id;
+        ServiceId = serviceId;
+        ServiceSpecification = specification;
+        ServiceCharacteristics = characteristics;
     }
 }

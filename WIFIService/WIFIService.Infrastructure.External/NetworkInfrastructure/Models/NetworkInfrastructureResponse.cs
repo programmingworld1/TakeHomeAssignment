@@ -1,4 +1,4 @@
-namespace WIFIService.Infrastructure.External.NetworkInfrastructure;
+namespace WIFIService.Infrastructure.External.NetworkInfrastructure.Models;
 
 public record NetworkInfrastructureResponse(
     string RequestId,

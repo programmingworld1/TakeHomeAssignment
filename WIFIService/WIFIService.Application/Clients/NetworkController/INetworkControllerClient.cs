@@ -1,4 +1,4 @@
-namespace WIFIService.Application.Clients;
+namespace WIFIService.Application.Clients.NetworkController;
 
 public interface INetworkControllerClient
 {
