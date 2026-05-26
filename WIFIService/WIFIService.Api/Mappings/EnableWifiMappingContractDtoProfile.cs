@@ -17,7 +17,7 @@ public class EnableWifiMappingContractDtoProfile : IRegister
                 src.OrderItem.Service.ServiceSpecification.Id,
                 src.OrderItem.Service.ServiceSpecification.Name
             ))
-            .Map(dest => dest.ServiceCharacteristics, src => src.OrderItem.Service.ServiceCharacteristics
+            .Map(dest => dest.ServiceCharacteristics, src => src.OrderItem.Service.ServiceCharacteristic
                 .Select(c => new ServiceCharacteristicDto(c.Name, c.ValueType, c.Value))
                 .ToList());
     }

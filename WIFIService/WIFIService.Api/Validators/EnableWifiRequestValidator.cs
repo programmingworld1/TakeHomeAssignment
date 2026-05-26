@@ -38,17 +38,17 @@ public class ServiceValidator : AbstractValidator<Service>
         RuleFor(x => x.ServiceSpecification.Id)
             .NotEmpty();
 
-        RuleFor(x => x.ServiceCharacteristics)
+        RuleFor(x => x.ServiceCharacteristic)
             .NotNull()
             .NotEmpty();
 
         foreach (var characteristic in RequiredCharacteristics)
         {
-            RuleFor(x => x.ServiceCharacteristics)
+            RuleFor(x => x.ServiceCharacteristic)
                 .Must(c => c.Any(x => x.Name == characteristic))
                 .WithMessage($"ServiceCharacteristic '{characteristic}' is required.");
 
-            RuleFor(x => x.ServiceCharacteristics)
+            RuleFor(x => x.ServiceCharacteristic)
                 .Must(c => c.Where(x => x.Name == characteristic)
                              .All(x => x.Value.ContainsKey(characteristic)))
                 .When(c => c.ServiceCharacteristic.Any(x => x.Name == characteristic))
