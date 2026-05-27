@@ -12,7 +12,21 @@
 - Postman: Your request setup should look like this (you can copy the body from the assignment and paste it, or copy it from the .http file):
 ![alt text](image-2.png)
 
+
 ### Architecture
+
+The project follows **Clean Architecture** combined with **Domain-Driven Design (DDD)** principles. Dependencies point strictly inward — outer layers know about inner layers, never the reverse.
+
+Clean Architecture ensures the business logic stays independent of frameworks, external services, and infrastructure details. This makes the core easy to test in isolation and resilient to change — swapping out an HTTP client or external API has no impact on the domain or application logic.
+
+Domain-Driven Design keeps the code aligned with the business domain. Rather than modeling around technical concerns, the structure reflects the actual domain concepts of the problem being solved. This makes the codebase easier to reason about and extend as requirements evolve. It also helps in protecting the invariants and having an aggregate root helps with having a consistent way of altering the domain models.
+
+- **`WIFIService.Domain`** — The core of the application. Contains the business logic and rules, completely isolated from any framework or infrastructure concern.
+- **`WIFIService.Application`** — Orchestrates use cases. Defines interfaces (ports) for external dependencies, which are implemented by the infrastructure layer. Depends only on Domain.
+- **`WIFIService.Infrastructure.External`** — Implements the interfaces defined in Application. Handles all communication with external systems.
+- **`WIFIService.Api`** — The entry point. Handles HTTP concerns: routing, validation, mapping, and middleware. Depends on Application; never touches Infrastructure directly.
+- **`WIFIService.Contracts`** — Holds the public request/response models for the API.
+- **`WIFIService.WireMock`** — A stub server that simulates external dependencies for local development and testing.
 
 ### Error Handling
 
