@@ -13,6 +13,16 @@
 ![alt text](image-2.png)
 
 
+### Docker
+
+The project uses **Docker Compose** to spin up the full environment with a single command. Two services are defined:
+
+- **`api`** — The WIFIService API, exposed on port `8080`.
+- **`wiremock`** — A stub server that simulates the two external dependencies (NetworkInfrastructure on port `9001` and NetworkController on port `9002`).
+
+The API is configured via environment variables to point at the WireMock container instead of real external services. This means the entire application can be run and tested locally without needing access to any real infrastructure. Docker guarantees the same environment on every machine, eliminating "works on my machine" issues.
+
+
 ### Architecture
 
 The project follows **Clean Architecture** combined with **Domain-Driven Design (DDD)** principles. Dependencies point strictly inward — outer layers know about inner layers, never the reverse.
@@ -27,6 +37,7 @@ Domain-Driven Design keeps the code aligned with the business domain. Rather tha
 - **`WIFIService.Api`** — The entry point. Handles HTTP concerns: routing, validation, mapping, and middleware. Depends on Application; never touches Infrastructure directly.
 - **`WIFIService.Contracts`** — Holds the public request/response models for the API.
 - **`WIFIService.WireMock`** — A stub server that simulates external dependencies for local development and testing.
+
 
 ### Error Handling
 

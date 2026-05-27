@@ -18,6 +18,15 @@ public static class DependencyInjection
         services.Configure<NetworkControllerSettings>(
             configuration.GetSection(NetworkControllerSettings.SectionName));
 
+        services.ConfigureHttpClientDefaults(builder =>
+        {
+            builder.AddStandardResilienceHandler(options =>
+            {
+                options.Retry.MaxRetryAttempts = 3;
+                options.Retry.Delay = TimeSpan.FromSeconds(1);
+            });
+        });
+
         services.AddHttpClient<INetworkInfrastructureClient, NetworkInfrastructureClient>();
         services.AddHttpClient<INetworkControllerClient, NetworkControllerClient>();
 
