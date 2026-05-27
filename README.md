@@ -12,6 +12,13 @@
 - Postman: Your request setup should look like this (you can copy the body from the assignment and paste it, or copy it from the .http file):
 ![alt text](docs/image-2.png)
 
+Alternative non-docker start-up option:
+1. Open VS, Select the api project as startup project.
+2. Right click on the "WIFIService.Wiremock" and select "Start without debugging" 
+3. Start the solution by pressing on the green button in VS.
+4. And then either use postman (see previous picture), but you have to change 
+the port nr which you can find in the console after running the API project. Or use the "WIFIService.http", this is easier.
+
 
 ### Docker
 

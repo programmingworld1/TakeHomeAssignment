@@ -14,7 +14,7 @@ public class NetworkInfrastructureClient : INetworkInfrastructureClient
     public NetworkInfrastructureClient(HttpClient httpClient, IOptions<NetworkInfrastructureSettings> settings, ILogger<NetworkInfrastructureClient> logger)
     {
         _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri(settings.Value.NetworkInfrastructureBaseUrl);
+        _httpClient.BaseAddress = new Uri(settings.Value.BaseUrl);
         _logger = logger;
     }
 

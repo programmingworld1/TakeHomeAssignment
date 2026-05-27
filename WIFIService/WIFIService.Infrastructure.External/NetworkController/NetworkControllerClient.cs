@@ -18,7 +18,7 @@ public class NetworkControllerClient : INetworkControllerClient
     public NetworkControllerClient(HttpClient httpClient, IOptions<NetworkControllerSettings> settings, ILogger<NetworkControllerClient> logger)
     {
         _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri(settings.Value.NetworkControllerBaseUrl);
+        _httpClient.BaseAddress = new Uri(settings.Value.BaseUrl);
         _logger = logger;
     }
 

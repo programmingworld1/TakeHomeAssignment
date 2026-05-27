@@ -4,5 +4,5 @@ public class NetworkInfrastructureSettings
 {
     public const string SectionName = "ExternalServices:NetworkInfrastructureApi";
 
-    public string NetworkInfrastructureBaseUrl { get; init; } = string.Empty;
+    public string BaseUrl { get; init; } = string.Empty;
 }
