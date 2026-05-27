@@ -14,7 +14,7 @@ public class EnableWifiServiceTests
 {
     private readonly INetworkInfrastructureClient _networkInfrastructureClient;
     private readonly INetworkControllerClient _networkControllerClient;
-    private readonly EnableWifiService _sut;
+    private readonly EnableWifiService _enableWifiService;
 
     public EnableWifiServiceTests()
     {
@@ -25,12 +25,15 @@ public class EnableWifiServiceTests
         new EnableWifiMappingDtoDomainProfile().Register(config);
         var mapper = new ServiceMapper(Substitute.For<IServiceProvider>(), config);
 
-        _sut = new EnableWifiService(_networkInfrastructureClient, _networkControllerClient, mapper,
+        _enableWifiService = new EnableWifiService(
+            _networkInfrastructureClient,
+            _networkControllerClient,
+            mapper,
             Substitute.For<ILogger<EnableWifiService>>());
     }
 
     [Fact]
-    public async Task ExecuteAsync_WhenActivationCalledWithCorrectData_ActivationSucceeds()
+    public async Task ActivateAsync_WhenCalledWithValidData_ActivationSucceeds()
     {
         var input = new EnableWifiServiceDtoBuilder().Build();
 
@@ -50,7 +53,7 @@ public class EnableWifiServiceTests
             DownstreamSpeed: speedProfiles[0].DownloadSpeedMbps
         );
 
-        await _sut.ExecuteAsync(input);
+        await _enableWifiService.ActivateAsync(input);
 
         await _networkControllerClient.Received(1).ActivateAsync(expectedRequest, Arg.Any<CancellationToken>());
     }

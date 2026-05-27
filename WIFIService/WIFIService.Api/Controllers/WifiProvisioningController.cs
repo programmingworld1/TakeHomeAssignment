@@ -34,13 +34,13 @@ public class WifiProvisioningController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Enable([FromBody] EnableWifiRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Activate([FromBody] EnableWifiRequest request, CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
 
         var input = _mapper.Map<EnableWifiServiceDto>(request);
 
-        var result = await _enableWifiService.ExecuteAsync(input, cancellationToken);
+        var result = await _enableWifiService.ActivateAsync(input, cancellationToken);
 
         if (!result.IsSuccess)
         {

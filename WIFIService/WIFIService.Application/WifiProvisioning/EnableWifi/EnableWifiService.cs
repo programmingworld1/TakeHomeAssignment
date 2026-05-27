@@ -28,14 +28,19 @@ public class EnableWifiService : IEnableWifiService
         _logger = logger;
     }
 
-    public async Task<Result<ServiceOrderStatus>> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
+    private static string GetCharacteristicValue(List<ServiceCharacteristic> characteristics, string name)
+    {
+        return characteristics.First(c => c.Name == name).Value[name];
+    }
+
+    public async Task<Result<ServiceOrderStatus>> ActivateAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
     {
         var serviceOrder = _mapper.Map<ServiceOrder>(input);
         var characteristics = serviceOrder.OrderItem.ServiceCharacteristics;
 
-        var customerId = characteristics.First(c => c.Name == "customerId").Value["customerId"];
-        var customerAddress = characteristics.First(c => c.Name == "customerAddress").Value["customerAddress"];
-        var speedProfileCode = characteristics.First(c => c.Name == "speedProfile").Value["speedProfile"];
+        var customerId = GetCharacteristicValue(characteristics, "customerId");
+        var customerAddress = GetCharacteristicValue(characteristics, "customerAddress");
+        var speedProfileCode = GetCharacteristicValue(characteristics, "speedProfile");
 
         _logger.LogInformation("Processing WiFi activation for customer {CustomerId} with speed profile {SpeedProfileCode}",
             customerId, speedProfileCode);
@@ -45,7 +50,9 @@ public class EnableWifiService : IEnableWifiService
 
         if (speedProfile is null)
         {
-            _logger.LogWarning("Speed profile {SpeedProfileCode} not found", speedProfileCode);
+            _logger.LogWarning("Speed profile {SpeedProfileCode} not found", 
+                speedProfileCode);
+
             return Result<ServiceOrderStatus>
                 .Failure(new Error(ErrorCode.SpeedProfileNotFound, $"Speed profile '{speedProfileCode}' not found."));
         }

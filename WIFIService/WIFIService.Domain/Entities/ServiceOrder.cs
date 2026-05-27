@@ -27,6 +27,9 @@ public class ServiceOrder
 
     public void MarkAsActive()
     {
+        if (Status == ServiceOrderStatus.Active)
+            throw new InvalidOperationException("Service order is already active.");
+
         Status = ServiceOrderStatus.Active;
     }
 }

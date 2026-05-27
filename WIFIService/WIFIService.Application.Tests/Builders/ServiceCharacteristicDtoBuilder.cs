@@ -8,9 +8,29 @@ public class ServiceCharacteristicDtoBuilder
     private string _valueType = "string";
     private Dictionary<string, string> _value = new() { ["customerId"] = "CUST-123" };
 
-    public ServiceCharacteristicDtoBuilder WithName(string name) { _name = name; return this; }
-    public ServiceCharacteristicDtoBuilder WithValueType(string valueType) { _valueType = valueType; return this; }
-    public ServiceCharacteristicDtoBuilder WithValue(Dictionary<string, string> value) { _value = value; return this; }
+    public ServiceCharacteristicDtoBuilder WithName(string name) 
+    { 
+        _name = name; 
+        return this; 
+    }
 
-    public ServiceCharacteristicDto Build() => new(_name, _valueType, _value);
+    public ServiceCharacteristicDtoBuilder WithValueType(string valueType) 
+    { 
+        _valueType = valueType; 
+        return this; 
+    }
+
+    public ServiceCharacteristicDtoBuilder WithValue(Dictionary<string, string> value) 
+    { 
+        _value = value; 
+        return this; 
+    }
+
+    public ServiceCharacteristicDto Build() 
+    { 
+        return new ServiceCharacteristicDto(
+            _name, 
+            _valueType, 
+            _value);
+    }
 }

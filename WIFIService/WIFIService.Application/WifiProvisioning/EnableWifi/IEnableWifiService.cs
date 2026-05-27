@@ -6,5 +6,5 @@ namespace WIFIService.Application.WifiProvisioning.EnableWifi;
 
 public interface IEnableWifiService
 {
-    Task<Result<ServiceOrderStatus>> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default);
+    Task<Result<ServiceOrderStatus>> ActivateAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default);
 }
