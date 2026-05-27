@@ -1,10 +1,10 @@
 ## README
 
 ### Instructions
-1 Have docker installed on your machine
-2 Navigate to TakeHomeAssignment\WIFIService
-3 Fire the following command: Docker compose up
-4 Then, either use postman or use the WIFIService.http file in VS (it can be found in the root of the api-project) to call the API endpoint.
+1. Have docker installed on your machine
+2. Navigate to TakeHomeAssignment\WIFIService
+3. Fire the following command: Docker compose up
+4. Then, either use postman or use the WIFIService.http file in VS (it can be found in the root of the api-project) to call the API endpoint.
 
 - WIFIService.http: is already setup with two different API endpoint requests, just click on Send request:
 ![alt text](image-1.png)
@@ -12,172 +12,20 @@
 - Postman: Your request setup should look like this (you can copy the body from the assignment and paste it, or copy it from the .http file):
 ![alt text](image-2.png)
 
+### Architecture
+
+### Error Handling
+
+All error responses follow the [RFC 9457 Problem Details](https://www.rfc-editor.org/rfc/rfc9457) standard and are returned as `application/problem+json`.
+
+Error handling is split across two layers:
+
+**Application layer — Result pattern**
+The service returns a `Result` instead of throwing for expected business failures. 
+Which then is converted to a `ProblemDetails` response. Exceptions should be reserved for truly unexpected situations (bugs), not for predictable outcomes like "speed profile not found". Using Result makes the failure explicit in the method, forces the caller to handle it, and avoids the overhead and hidden control flow of exception throwing. Exceptions are also costy. Also, returning a result or throwing an exception says something about the intent: exceptions for situations you dont expect (bugs), errors for business failures.
 
 
+**API layer — GlobalExceptionHandler**
+Everything else then the result-pattern is caught centrally by the `GlobalExceptionHandler` middleware, which could be bugs (via exceptions) or ValidationExceptions. These are also converted to a problem details response.
 
-
-
-
-
-
-## 📄 Take-Home Assignment — O&Si Developer
-
-### 🧠 Objective
-
-Clone this repository and build a small REST API that can **activate WiFi for a customer**.
-
-### 📘 Background
-
-When a customer purchases WiFi service at **Vodafone Ziggo**, a store front officer
-enters the customer's details into a portal. This portal will send customer data to
-**your API** in JSON format.
-
-To activate the WiFi, your API must:
-
-1. **Receive** the customer data.
-2. **Fetch additional network information** from the Network Infrastructure API.
-3. **Assemble a payload** using both sources of information.
-4. **Send a request** to the **network controller** to activate the WiFi service.
-
----
-
-### Component overview
-
-![Diagram](docs/OnboardingAssignmentContainer.png)
-
----
-
-### 📥 Input: Customer Data
-
-Your API will receive a request from the customer portal with the following JSON data:
-
-```json
-{
-  "externalId": "ACT-20251017-001",
-  "description": "Activate WiFi service for VFZ customer",
-  "orderItem": {
-    "id": "1",
-    "service": {
-      "id": "",
-      "serviceSpecification": {
-        "id": "SPEC-WIFI-001",
-        "name": "WiFi Service"
-      },
-      "serviceCharacteristic": [
-        {
-          "name": "customerId",
-          "valueType": "string",
-          "value": {
-            "@type": "string",
-            "customerId": "CUST-4589"
-          }
-        },
-        {
-          "name": "customerName",
-          "valueType": "string",
-          "value": {
-            "@type": "string",
-            "customerName": "Alice Johnson"
-          }
-        },
-        {
-          "name": "customerAddress",
-          "valueType": "string",
-          "value": {
-            "@type": "string",
-            "customerAddress": "Keizersgracht 123, 1015 CJ Amsterdam, Netherlands"
-          }
-        },
-        {
-          "name": "speedProfile",
-          "valueType": "string",
-          "value": {
-            "@type": "string",
-            "speedProfile": "SP-500"
-          }
-        }
-      ]
-    }
-  }
-}
-```
-
----
-
-### 🌐 External Dependency: Network Infrastructure API
-
-To complete the activation, you need to retrieve the actual speeds associated with the speed profile from the
-Network Infrastructure API. This API will return the following data:
-
-```json
-{
-  "requestId": "",
-  "speedProfiles": [
-    {
-      "code": "SP-100",
-      "downloadSpeedMbps": 100,
-      "uploadSpeedMbps": 20
-    },
-    {
-      "code": "SP-300",
-      "downloadSpeedMbps": 300,
-      "uploadSpeedMbps": 50
-    },
-    {
-      "code": "SP-500",
-      "downloadSpeedMbps": 500,
-      "uploadSpeedMbps": 100
-    },
-    {
-      "code": "SP-1000",
-      "downloadSpeedMbps": 1000,
-      "uploadSpeedMbps": 200
-    }
-  ]
-}
-```
-
----
-
-### 📤 Output: Activation Request to Network Controller
-
-After combining the data, create a request to activate the WiFi service for the customer.
-The Network API expects a payload in the following format.
-
-```json
-{
-  "customerId": "<customerId>",
-  "customerAddress": "<customerAddress>",
-  "upstreamSpeed": "<uploadSpeedMbps>",
-  "downstreamSpeed": "<downloadSpeedMbps>"
-}
-```
-
----
-
-### ✅ Requirements
-
-The goal of this assignment is to activate the WiFi service of a customer by sending the correct request to the Network Controller API.
-
-* Build a REST API using C# with the .NET framework.
-* Your API should:
-    * Accept the incoming customer request.
-    * Fetch additional data from the Network Infrastructure API.
-    * Construct the required payload.
-    * Send the activation request to the Network Controller API.
-    * Return an appropriate HTTP response indicating success or failure.
-* Mock the Network Infrastructure API and Network Controller API with [WireMock](https://wiremock.org/docs/).
-* Create a unit test to proof that you can send the correct request to the Network Controller API.
-* Include instructions on how to run your solution (e.g. in a README).
-* Push your project to a Git repository.
-
----
-
-### 💡 Bonus (Optional)
-
-* Achieve at least 80% test coverage.
-* Create a Docker image for your solution and include a Dockerfile in your project.
-* Implement error handling and logging:
-  * Handle network timeouts, or missing JSON fields.
-  * Return clear and meaningful HTTP status codes and messages (e.g., 400 Bad Request, 404 Not Found, 500 Internal Server Error).
-  * Include structured error responses in JSON format.
+### 
