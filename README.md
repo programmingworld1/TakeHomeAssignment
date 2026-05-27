@@ -7,10 +7,10 @@
 4. Then, either use postman or use the WIFIService.http file in VS (it can be found in the root of the api-project) to call the API endpoint.
 
 - WIFIService.http: is already setup with two different API endpoint requests, just click on Send request:
-![alt text](image-1.png)
+![alt text](docs/image-1.png)
 
 - Postman: Your request setup should look like this (you can copy the body from the assignment and paste it, or copy it from the .http file):
-![alt text](image-2.png)
+![alt text](docs/image-2.png)
 
 
 ### Docker
