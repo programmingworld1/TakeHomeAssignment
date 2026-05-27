@@ -1,6 +1,6 @@
-namespace WIFIService.Application.Responses
+namespace WIFIService.Application.ResultPattern
 {
-    // Voor operations with return value
+    // For operations with return value
     public class Result<T>
     {
         public bool IsSuccess { get; }
@@ -27,7 +27,7 @@ namespace WIFIService.Application.Responses
         }
     }
 
-    // Voor operations without return value
+    // For operations without return value
     public class Result
     {
         public bool IsSuccess { get; }

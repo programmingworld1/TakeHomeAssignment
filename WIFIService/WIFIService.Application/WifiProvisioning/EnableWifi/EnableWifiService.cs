@@ -2,7 +2,7 @@ using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using WIFIService.Application.Clients.NetworkController;
 using WIFIService.Application.Clients.NetworkInfrastructure;
-using WIFIService.Application.Responses;
+using WIFIService.Application.ResultPattern;
 using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
 using WIFIService.Domain.Entities;
 using WIFIService.Domain.ValueObjects;

@@ -1,4 +1,4 @@
-using WIFIService.Application.Responses;
+using WIFIService.Application.ResultPattern;
 using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
 using WIFIService.Domain.ValueObjects;
 

@@ -1,4 +1,4 @@
-using WIFIService.Application.Responses;
+using WIFIService.Application.ResultPattern;
 
 namespace WIFIService.Api.Middlewares.Errors;
 

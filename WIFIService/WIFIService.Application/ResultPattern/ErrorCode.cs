@@ -1,4 +1,4 @@
-namespace WIFIService.Application.Responses
+namespace WIFIService.Application.ResultPattern
 {
     public enum ErrorCode
     {
