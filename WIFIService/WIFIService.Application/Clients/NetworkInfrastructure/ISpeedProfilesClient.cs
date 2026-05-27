@@ -1,6 +1,6 @@
 namespace WIFIService.Application.Clients.NetworkInfrastructure;
 
-public interface INetworkInfrastructureClient
+public interface ISpeedProfilesClient
 {
     Task<IEnumerable<SpeedProfile>> GetSpeedProfilesAsync(CancellationToken cancellationToken = default);
 }

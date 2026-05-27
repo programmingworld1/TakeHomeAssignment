@@ -12,13 +12,13 @@ namespace WIFIService.Application.Tests.WifiProvisioning.EnableWifi;
 
 public class EnableWifiServiceTests
 {
-    private readonly INetworkInfrastructureClient _networkInfrastructureClient;
+    private readonly ISpeedProfilesClient _speedProfilesClient;
     private readonly INetworkControllerClient _networkControllerClient;
     private readonly EnableWifiService _enableWifiService;
 
     public EnableWifiServiceTests()
     {
-        _networkInfrastructureClient = Substitute.For<INetworkInfrastructureClient>();
+        _speedProfilesClient = Substitute.For<ISpeedProfilesClient>();
         _networkControllerClient = Substitute.For<INetworkControllerClient>();
 
         var config = new TypeAdapterConfig();
@@ -26,7 +26,7 @@ public class EnableWifiServiceTests
         var mapper = new ServiceMapper(Substitute.For<IServiceProvider>(), config);
 
         _enableWifiService = new EnableWifiService(
-            _networkInfrastructureClient,
+            _speedProfilesClient,
             _networkControllerClient,
             mapper,
             Substitute.For<ILogger<EnableWifiService>>());
@@ -42,7 +42,7 @@ public class EnableWifiServiceTests
             new SpeedProfile("FAST-100", DownloadSpeedMbps: 100, UploadSpeedMbps: 50)
         };
 
-        _networkInfrastructureClient
+        _speedProfilesClient
             .GetSpeedProfilesAsync(Arg.Any<CancellationToken>())
             .Returns(speedProfiles);
 

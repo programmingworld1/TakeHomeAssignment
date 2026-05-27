@@ -1,6 +1,6 @@
 namespace WIFIService.Infrastructure.External.NetworkInfrastructure;
 
-public class NetworkInfrastructureSettings
+public class SpeedProfilesClientSettings
 {
     public const string SectionName = "ExternalServices:NetworkInfrastructureApi";
 

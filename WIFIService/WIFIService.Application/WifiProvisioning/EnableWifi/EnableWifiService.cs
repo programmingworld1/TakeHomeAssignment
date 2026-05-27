@@ -11,18 +11,18 @@ namespace WIFIService.Application.WifiProvisioning.EnableWifi;
 
 public class EnableWifiService : IEnableWifiService
 {
-    private readonly INetworkInfrastructureClient _networkInfrastructureClient;
+    private readonly ISpeedProfilesClient _speedProfilesClient;
     private readonly INetworkControllerClient _networkControllerClient;
     private readonly IMapper _mapper;
     private readonly ILogger<EnableWifiService> _logger;
 
     public EnableWifiService(
-        INetworkInfrastructureClient networkInfrastructureClient,
+        ISpeedProfilesClient SpeedProfilesClient,
         INetworkControllerClient networkControllerClient,
         IMapper mapper,
         ILogger<EnableWifiService> logger)
     {
-        _networkInfrastructureClient = networkInfrastructureClient;
+        _speedProfilesClient = SpeedProfilesClient;
         _networkControllerClient = networkControllerClient;
         _mapper = mapper;
         _logger = logger;
@@ -45,7 +45,7 @@ public class EnableWifiService : IEnableWifiService
         _logger.LogInformation("Processing WiFi activation for customer {CustomerId} with speed profile {SpeedProfileCode}",
             customerId, speedProfileCode);
 
-        var speedProfiles = await _networkInfrastructureClient.GetSpeedProfilesAsync(cancellationToken);
+        var speedProfiles = await _speedProfilesClient.GetSpeedProfilesAsync(cancellationToken);
         var speedProfile = speedProfiles.FirstOrDefault(p => p.Code == speedProfileCode);
 
         if (speedProfile is null)

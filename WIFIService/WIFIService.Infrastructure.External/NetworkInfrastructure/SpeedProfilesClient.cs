@@ -6,15 +6,15 @@ using WIFIService.Infrastructure.External.NetworkInfrastructure.Models;
 
 namespace WIFIService.Infrastructure.External.NetworkInfrastructure;
 
-public class NetworkInfrastructureClient : INetworkInfrastructureClient
+public class SpeedProfilesClient : ISpeedProfilesClient
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<NetworkInfrastructureClient> _logger;
+    private readonly ILogger<SpeedProfilesClient> _logger;
 
-    public NetworkInfrastructureClient(
+    public SpeedProfilesClient(
         HttpClient httpClient, 
-        IOptions<NetworkInfrastructureSettings> settings, 
-        ILogger<NetworkInfrastructureClient> logger)
+        IOptions<SpeedProfilesClientSettings> settings, 
+        ILogger<SpeedProfilesClient> logger)
     {
         _httpClient = httpClient;
         _httpClient.BaseAddress = new Uri(settings.Value.BaseUrl);
