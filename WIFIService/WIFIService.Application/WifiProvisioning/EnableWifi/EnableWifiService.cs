@@ -45,7 +45,7 @@ public class EnableWifiService : IEnableWifiService
         if (speedProfile is null)
         {
             _logger.LogWarning("Speed profile {SpeedProfileCode} not found", speedProfileCode);
-            return Result.Failure(new Error("SpeedProfileNotFound", $"Speed profile '{speedProfileCode}' not found."));
+            return Result.Failure(new Error(ErrorCode.SpeedProfileNotFound, $"Speed profile '{speedProfileCode}' not found."));
         }
 
         var activationRequest = new NetworkActivationRequest(

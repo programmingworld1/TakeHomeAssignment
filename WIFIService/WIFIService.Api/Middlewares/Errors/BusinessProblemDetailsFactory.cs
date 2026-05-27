@@ -20,7 +20,7 @@ public sealed class BusinessProblemDetailsFactory
         var problem = _factory.CreateProblemDetails(
             httpContext: httpContext,
             statusCode: statusCode,
-            title: error.Code,
+            title: error.Code.ToString(),
             detail: error.Message,
             type: $"https://httpstatuses.com/{statusCode}",
             instance: httpContext.Request.Path

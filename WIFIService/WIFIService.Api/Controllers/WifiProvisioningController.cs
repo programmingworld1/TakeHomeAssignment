@@ -45,7 +45,11 @@ public class WifiProvisioningController : ControllerBase
         if (!result.IsSuccess)
         {
             var pd = _problemDetailsFactory.Create(HttpContext, result.Error!);
-            return new ObjectResult(pd) { StatusCode = pd.Status };
+
+            return new ObjectResult(pd) 
+            { 
+                StatusCode = pd.Status 
+            };
         }
 
         return Ok(new EnableWifiResponse("WiFi has been activated successfully."));

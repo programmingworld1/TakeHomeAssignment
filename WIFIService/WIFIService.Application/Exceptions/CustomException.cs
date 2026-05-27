@@ -1,10 +1,12 @@
+using WIFIService.Application.Responses;
+
 namespace WIFIService.Application.Exceptions
 {
     public abstract class CustomException : Exception
     {
-        public string ErrorCode { get; }
+        public ErrorCode ErrorCode { get; }
 
-        protected CustomException(string errorCode, string message)
+        protected CustomException(ErrorCode errorCode, string message)
             : base(message)
         {
             ErrorCode = errorCode;

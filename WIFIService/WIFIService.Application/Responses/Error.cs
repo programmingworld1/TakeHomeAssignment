@@ -1,4 +1,4 @@
 namespace WIFIService.Application.Responses
 {
-    public record Error(string Code, string Message);
+    public record Error(ErrorCode Code, string Message);
 }

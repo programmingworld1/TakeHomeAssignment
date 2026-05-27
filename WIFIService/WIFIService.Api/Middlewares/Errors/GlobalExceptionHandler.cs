@@ -28,7 +28,7 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
                 context,
                 ErrorCodeMapper.ToStatusCode(httpEx.ErrorCode),
                 httpEx.Message,
-                httpEx.ErrorCode
+                httpEx.ErrorCode.ToString()
             ),
 
             ValidationException valEx => CreateValidationProblem(
