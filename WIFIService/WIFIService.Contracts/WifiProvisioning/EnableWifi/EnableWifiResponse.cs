@@ -1,3 +1,5 @@
 namespace WIFIService.Contracts.WifiProvisioning.EnableWifi;
 
-public record EnableWifiResponse(string Status);
+public record EnableWifiResponse(
+    string Status
+);

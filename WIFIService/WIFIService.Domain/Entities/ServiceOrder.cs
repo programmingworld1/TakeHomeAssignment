@@ -10,7 +10,10 @@ public class ServiceOrder
     public ServiceOrderStatus Status { get; private set; }
     public ServiceOrderItem OrderItem { get; private set; }
 
-    public ServiceOrder(string externalId, string? description, ServiceOrderItem orderItem)
+    public ServiceOrder(
+        string externalId,
+        string? description,
+        ServiceOrderItem orderItem)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(externalId);
         ArgumentNullException.ThrowIfNull(orderItem);

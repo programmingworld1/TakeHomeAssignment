@@ -7,7 +7,9 @@ public record ServiceSpecification
 
     private ServiceSpecification() { }
 
-    public ServiceSpecification(string id, string name)
+    public ServiceSpecification(
+        string id,
+        string name)
     {
         if (string.IsNullOrWhiteSpace(id))
             throw new ArgumentException("Id cannot be empty.", nameof(id));

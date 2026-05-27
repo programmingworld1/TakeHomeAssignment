@@ -9,7 +9,11 @@ public class ServiceOrderItem
     public ServiceSpecification ServiceSpecification { get; private set; }
     public List<ServiceCharacteristic> ServiceCharacteristics { get; private set; } = [];
 
-    public ServiceOrderItem(string id, string? serviceId, ServiceSpecification specification, List<ServiceCharacteristic> characteristics)
+    public ServiceOrderItem(
+        string id,
+        string? serviceId,
+        ServiceSpecification specification,
+        List<ServiceCharacteristic> characteristics)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(id);
 

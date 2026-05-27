@@ -8,7 +8,10 @@ public record ServiceCharacteristic
 
     private ServiceCharacteristic() { }
 
-    public ServiceCharacteristic(string name, string valueType, Dictionary<string, string> value)
+    public ServiceCharacteristic(
+        string name,
+        string valueType,
+        Dictionary<string, string> value)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Name cannot be empty.", nameof(name));
