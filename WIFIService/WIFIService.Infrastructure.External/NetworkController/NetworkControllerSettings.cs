@@ -4,5 +4,5 @@ public class NetworkControllerSettings
 {
     public const string SectionName = "ExternalServices:NetworkControllerApi";
 
-    public string BaseUrl { get; init; } = string.Empty;
+    public string NetworkControllerBaseUrl { get; init; } = string.Empty;
 }

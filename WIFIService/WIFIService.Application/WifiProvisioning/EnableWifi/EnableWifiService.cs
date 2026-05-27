@@ -5,6 +5,7 @@ using WIFIService.Application.Clients.NetworkInfrastructure;
 using WIFIService.Application.Responses;
 using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
 using WIFIService.Domain.Entities;
+using WIFIService.Domain.ValueObjects;
 
 namespace WIFIService.Application.WifiProvisioning.EnableWifi;
 
@@ -27,7 +28,7 @@ public class EnableWifiService : IEnableWifiService
         _logger = logger;
     }
 
-    public async Task<Result> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
+    public async Task<Result<ServiceOrderStatus>> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default)
     {
         var serviceOrder = _mapper.Map<ServiceOrder>(input);
         var characteristics = serviceOrder.OrderItem.ServiceCharacteristics;
@@ -45,7 +46,8 @@ public class EnableWifiService : IEnableWifiService
         if (speedProfile is null)
         {
             _logger.LogWarning("Speed profile {SpeedProfileCode} not found", speedProfileCode);
-            return Result.Failure(new Error(ErrorCode.SpeedProfileNotFound, $"Speed profile '{speedProfileCode}' not found."));
+            return Result<ServiceOrderStatus>
+                .Failure(new Error(ErrorCode.SpeedProfileNotFound, $"Speed profile '{speedProfileCode}' not found."));
         }
 
         var activationRequest = new NetworkActivationRequest(
@@ -61,6 +63,6 @@ public class EnableWifiService : IEnableWifiService
 
         _logger.LogInformation("WiFi activation succeeded for customer {CustomerId}", customerId);
 
-        return Result.Success();
+        return Result<ServiceOrderStatus>.Success(serviceOrder.Status);
     }
 }

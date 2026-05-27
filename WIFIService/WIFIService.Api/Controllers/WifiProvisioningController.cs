@@ -52,6 +52,6 @@ public class WifiProvisioningController : ControllerBase
             };
         }
 
-        return Ok(new EnableWifiResponse("WiFi has been activated successfully."));
+        return Ok(new EnableWifiResponse(result.Value!.ToString()));
     }
 }

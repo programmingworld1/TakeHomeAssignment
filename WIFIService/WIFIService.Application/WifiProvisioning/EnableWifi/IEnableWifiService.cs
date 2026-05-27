@@ -1,9 +1,10 @@
 using WIFIService.Application.Responses;
 using WIFIService.Application.WifiProvisioning.EnableWifi.Models;
+using WIFIService.Domain.ValueObjects;
 
 namespace WIFIService.Application.WifiProvisioning.EnableWifi;
 
 public interface IEnableWifiService
 {
-    Task<Result> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default);
+    Task<Result<ServiceOrderStatus>> ExecuteAsync(EnableWifiServiceDto input, CancellationToken cancellationToken = default);
 }
